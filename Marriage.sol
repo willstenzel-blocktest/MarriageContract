@@ -31,7 +31,7 @@ contract Marriage is Owned {
     }
 
     modifier areMarried {
-        require(sha3(marriageStatus) == sha3("Married"));
+        require(keccak256(marriageStatus) == keccak256("Married"));
         _;
     }
 
@@ -53,17 +53,17 @@ contract Marriage is Owned {
         vows = _vows;
         marriageStatus = "Married";
         majorEvents.push(Event(now, "Marriage", vows));
-        MajorEvent("Marrigage", vows, url);
+        MajorEvent("Marrigage", vows);
     }
 
     // Set the marriage status if it changes
-    function setStatus(string status, string url) onlyOwner {
+    function setStatus(string status) onlyOwner {
         marriageStatus = status;
-        setMajorEvent("Changed Status", status, url);
+        setMajorEvent("Changed Status", status);
     }
 
     // Set the IPFS hash of the image of the couple
-    function setMajorEvent(string name, string description, string url) onlyOwner areMarried {
+    function setMajorEvent(string name, string description) onlyOwner areMarried {
         majorEvents.push(Event(now, name, description));
         MajorEvent(name, description);
     }
